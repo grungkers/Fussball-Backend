@@ -3,7 +3,6 @@ package org.playwork.fussballfinder.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -18,56 +17,51 @@ public class Event implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Column(name="away_score")
 	private int awayScore;
 
-	@Column(name="away_team")
-	private int awayTeam;
-
 	@Lob
 	@Column(name="away_team_note")
 	private String awayTeamNote;
 
+	@Column(name="created_by", nullable=false)
+	private int createdBy;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date")
+	@Column(name="created_date", nullable=false)
 	private Date createdDate;
 
 	@Lob
 	private String description;
 
-	@Column(name="event_type")
+	@Column(name="event_type", nullable=false)
 	private int eventType;
 
 	@Column(name="home_score")
 	private int homeScore;
 
-	@Column(name="is_public")
+	@Column(name="is_public", nullable=false)
 	private byte isPublic;
 
 	@Lob
 	@Column(name="owner_team_note")
 	private String ownerTeamNote;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="created_by")
-	private User user;
+	@Column(name="sports_venue_id", nullable=false)
+	private int sportsVenueId;
 
 	//bi-directional many-to-one association to Team
-	@ManyToOne
-	@JoinColumn(name="owner")
-	private Team team;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="owner", nullable=false)
+	private Team team1;
 
-	//bi-directional many-to-one association to SportsVenue
-	@ManyToOne
-	@JoinColumn(name="sports_venue_id")
-	private SportsVenue sportsVenue;
-
-	//bi-directional many-to-one association to ParticipantsEvent
-	@OneToMany(mappedBy="event", fetch=FetchType.EAGER)
-	private List<ParticipantsEvent> participantsEvents;
+	//bi-directional many-to-one association to Team
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="away_team")
+	private Team team2;
 
 	public Event() {
 	}
@@ -88,20 +82,20 @@ public class Event implements Serializable {
 		this.awayScore = awayScore;
 	}
 
-	public int getAwayTeam() {
-		return this.awayTeam;
-	}
-
-	public void setAwayTeam(int awayTeam) {
-		this.awayTeam = awayTeam;
-	}
-
 	public String getAwayTeamNote() {
 		return this.awayTeamNote;
 	}
 
 	public void setAwayTeamNote(String awayTeamNote) {
 		this.awayTeamNote = awayTeamNote;
+	}
+
+	public int getCreatedBy() {
+		return this.createdBy;
+	}
+
+	public void setCreatedBy(int createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	public Date getCreatedDate() {
@@ -152,50 +146,28 @@ public class Event implements Serializable {
 		this.ownerTeamNote = ownerTeamNote;
 	}
 
-	public User getUser() {
-		return this.user;
+	public int getSportsVenueId() {
+		return this.sportsVenueId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setSportsVenueId(int sportsVenueId) {
+		this.sportsVenueId = sportsVenueId;
 	}
 
-	public Team getTeam() {
-		return this.team;
+	public Team getTeam1() {
+		return this.team1;
 	}
 
-	public void setTeam(Team team) {
-		this.team = team;
+	public void setTeam1(Team team1) {
+		this.team1 = team1;
 	}
 
-	public SportsVenue getSportsVenue() {
-		return this.sportsVenue;
+	public Team getTeam2() {
+		return this.team2;
 	}
 
-	public void setSportsVenue(SportsVenue sportsVenue) {
-		this.sportsVenue = sportsVenue;
-	}
-
-	public List<ParticipantsEvent> getParticipantsEvents() {
-		return this.participantsEvents;
-	}
-
-	public void setParticipantsEvents(List<ParticipantsEvent> participantsEvents) {
-		this.participantsEvents = participantsEvents;
-	}
-
-	public ParticipantsEvent addParticipantsEvent(ParticipantsEvent participantsEvent) {
-		getParticipantsEvents().add(participantsEvent);
-		participantsEvent.setEvent(this);
-
-		return participantsEvent;
-	}
-
-	public ParticipantsEvent removeParticipantsEvent(ParticipantsEvent participantsEvent) {
-		getParticipantsEvents().remove(participantsEvent);
-		participantsEvent.setEvent(null);
-
-		return participantsEvent;
+	public void setTeam2(Team team2) {
+		this.team2 = team2;
 	}
 
 }

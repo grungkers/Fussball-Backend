@@ -3,7 +3,6 @@ package org.playwork.fussballfinder.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -18,21 +17,20 @@ public class TeamPhotoAlbum implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date")
+	@Column(name="created_date", nullable=false)
 	private Date createdDate;
 
+	@Column(nullable=false, length=150)
 	private String title;
 
 	//bi-directional many-to-one association to Team
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="team_id", nullable=false)
 	private Team team;
-
-	//bi-directional many-to-one association to TeamPhoto
-	@OneToMany(mappedBy="teamPhotoAlbum", fetch=FetchType.EAGER)
-	private List<TeamPhoto> teamPhotos;
 
 	public TeamPhotoAlbum() {
 	}
@@ -67,28 +65,6 @@ public class TeamPhotoAlbum implements Serializable {
 
 	public void setTeam(Team team) {
 		this.team = team;
-	}
-
-	public List<TeamPhoto> getTeamPhotos() {
-		return this.teamPhotos;
-	}
-
-	public void setTeamPhotos(List<TeamPhoto> teamPhotos) {
-		this.teamPhotos = teamPhotos;
-	}
-
-	public TeamPhoto addTeamPhoto(TeamPhoto teamPhoto) {
-		getTeamPhotos().add(teamPhoto);
-		teamPhoto.setTeamPhotoAlbum(this);
-
-		return teamPhoto;
-	}
-
-	public TeamPhoto removeTeamPhoto(TeamPhoto teamPhoto) {
-		getTeamPhotos().remove(teamPhoto);
-		teamPhoto.setTeamPhotoAlbum(null);
-
-		return teamPhoto;
 	}
 
 }

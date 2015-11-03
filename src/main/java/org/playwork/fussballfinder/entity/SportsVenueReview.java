@@ -16,19 +16,18 @@ public class SportsVenueReview implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Lob
+	@Column(nullable=false)
 	private String comment;
 
-	//bi-directional many-to-one association to SportsVenue
-	@ManyToOne
-	@JoinColumn(name="sports_venue_id")
-	private SportsVenue sportsVenue;
+	@Column(name="sports_venue_id", nullable=false)
+	private int sportsVenueId;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
+	@Column(name="user_id", nullable=false)
+	private int userId;
 
 	public SportsVenueReview() {
 	}
@@ -49,20 +48,20 @@ public class SportsVenueReview implements Serializable {
 		this.comment = comment;
 	}
 
-	public SportsVenue getSportsVenue() {
-		return this.sportsVenue;
+	public int getSportsVenueId() {
+		return this.sportsVenueId;
 	}
 
-	public void setSportsVenue(SportsVenue sportsVenue) {
-		this.sportsVenue = sportsVenue;
+	public void setSportsVenueId(int sportsVenueId) {
+		this.sportsVenueId = sportsVenueId;
 	}
 
-	public User getUser() {
-		return this.user;
+	public int getUserId() {
+		return this.userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }

@@ -3,7 +3,6 @@ package org.playwork.fussballfinder.entity;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -18,21 +17,18 @@ public class UserPhotoAlbum implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date")
+	@Column(name="created_date", nullable=false)
 	private Date createdDate;
 
+	@Column(nullable=false, length=150)
 	private String title;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
-
-	//bi-directional many-to-one association to UserPhoto
-	@OneToMany(mappedBy="userPhotoAlbum", fetch=FetchType.EAGER)
-	private List<UserPhoto> userPhotos;
+	@Column(name="user_id", nullable=false)
+	private int userId;
 
 	public UserPhotoAlbum() {
 	}
@@ -61,34 +57,12 @@ public class UserPhotoAlbum implements Serializable {
 		this.title = title;
 	}
 
-	public User getUser() {
-		return this.user;
+	public int getUserId() {
+		return this.userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public List<UserPhoto> getUserPhotos() {
-		return this.userPhotos;
-	}
-
-	public void setUserPhotos(List<UserPhoto> userPhotos) {
-		this.userPhotos = userPhotos;
-	}
-
-	public UserPhoto addUserPhoto(UserPhoto userPhoto) {
-		getUserPhotos().add(userPhoto);
-		userPhoto.setUserPhotoAlbum(this);
-
-		return userPhoto;
-	}
-
-	public UserPhoto removeUserPhoto(UserPhoto userPhoto) {
-		getUserPhotos().remove(userPhoto);
-		userPhoto.setUserPhotoAlbum(null);
-
-		return userPhoto;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }

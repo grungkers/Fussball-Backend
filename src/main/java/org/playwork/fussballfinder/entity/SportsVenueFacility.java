@@ -16,14 +16,14 @@ public class SportsVenueFacility implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
-	private String values;
+	@Column(name="sports_venue_id", nullable=false)
+	private int sportsVenueId;
 
-	//bi-directional many-to-one association to SportsVenue
-	@ManyToOne
-	@JoinColumn(name="sports_venue_id")
-	private SportsVenue sportsVenue;
+	@Column(nullable=false, length=50)
+	private String values;
 
 	public SportsVenueFacility() {
 	}
@@ -36,20 +36,20 @@ public class SportsVenueFacility implements Serializable {
 		this.id = id;
 	}
 
+	public int getSportsVenueId() {
+		return this.sportsVenueId;
+	}
+
+	public void setSportsVenueId(int sportsVenueId) {
+		this.sportsVenueId = sportsVenueId;
+	}
+
 	public String getValues() {
 		return this.values;
 	}
 
 	public void setValues(String values) {
 		this.values = values;
-	}
-
-	public SportsVenue getSportsVenue() {
-		return this.sportsVenue;
-	}
-
-	public void setSportsVenue(SportsVenue sportsVenue) {
-		this.sportsVenue = sportsVenue;
 	}
 
 }

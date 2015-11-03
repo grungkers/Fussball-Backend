@@ -16,23 +16,25 @@ public class ParticipantsEvent implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
+	@Column(nullable=false, length=30)
 	private String attendance;
 
 	private int author;
 
+	@Column(name="event_id", nullable=false)
+	private int eventId;
+
+	@Column(nullable=false, length=30)
 	private String status;
 
+	@Column(nullable=false, length=15)
 	private String type;
 
-	//bi-directional many-to-one association to Event
-	@ManyToOne
-	private Event event;
-
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
+	@Column(name="user_id", nullable=false)
+	private int userId;
 
 	public ParticipantsEvent() {
 	}
@@ -61,6 +63,14 @@ public class ParticipantsEvent implements Serializable {
 		this.author = author;
 	}
 
+	public int getEventId() {
+		return this.eventId;
+	}
+
+	public void setEventId(int eventId) {
+		this.eventId = eventId;
+	}
+
 	public String getStatus() {
 		return this.status;
 	}
@@ -77,20 +87,12 @@ public class ParticipantsEvent implements Serializable {
 		this.type = type;
 	}
 
-	public Event getEvent() {
-		return this.event;
+	public int getUserId() {
+		return this.userId;
 	}
 
-	public void setEvent(Event event) {
-		this.event = event;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }

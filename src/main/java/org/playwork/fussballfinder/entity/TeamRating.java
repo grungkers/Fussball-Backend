@@ -16,17 +16,20 @@ public class TeamRating implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
+	@Column(nullable=false)
 	private int count;
 
+	@Column(nullable=false, length=15)
 	private String lastip;
 
+	@Column(nullable=false)
 	private int sum;
 
-	//bi-directional many-to-one association to Team
-	@ManyToOne
-	private Team team;
+	@Column(name="team_id", nullable=false)
+	private int teamId;
 
 	public TeamRating() {
 	}
@@ -63,12 +66,12 @@ public class TeamRating implements Serializable {
 		this.sum = sum;
 	}
 
-	public Team getTeam() {
-		return this.team;
+	public int getTeamId() {
+		return this.teamId;
 	}
 
-	public void setTeam(Team team) {
-		this.team = team;
+	public void setTeamId(int teamId) {
+		this.teamId = teamId;
 	}
 
 }

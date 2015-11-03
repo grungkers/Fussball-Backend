@@ -16,20 +16,16 @@ public class TeamOfficer implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
-	//bi-directional many-to-one association to TeamRole
-	@ManyToOne
-	@JoinColumn(name="role_id")
-	private TeamRole teamRole;
+	@Column(name="team_id", nullable=false)
+	private int teamId;
 
-	//bi-directional many-to-one association to Team
-	@ManyToOne
-	private Team team;
-
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
+	//bi-directional many-to-one association to UserTeam
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="user_teams_id", nullable=false)
+	private UserTeam userTeam;
 
 	public TeamOfficer() {
 	}
@@ -42,28 +38,20 @@ public class TeamOfficer implements Serializable {
 		this.id = id;
 	}
 
-	public TeamRole getTeamRole() {
-		return this.teamRole;
+	public int getTeamId() {
+		return this.teamId;
 	}
 
-	public void setTeamRole(TeamRole teamRole) {
-		this.teamRole = teamRole;
+	public void setTeamId(int teamId) {
+		this.teamId = teamId;
 	}
 
-	public Team getTeam() {
-		return this.team;
+	public UserTeam getUserTeam() {
+		return this.userTeam;
 	}
 
-	public void setTeam(Team team) {
-		this.team = team;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserTeam(UserTeam userTeam) {
+		this.userTeam = userTeam;
 	}
 
 }

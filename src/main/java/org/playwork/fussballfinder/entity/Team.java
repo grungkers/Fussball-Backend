@@ -18,56 +18,45 @@ public class Team implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
+	@Column(length=255)
 	private String address;
 
+	@Column(name="created_by", nullable=false)
+	private int createdBy;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date")
+	@Column(name="created_date", nullable=false)
 	private Date createdDate;
 
 	private float latitude;
 
 	private float longitude;
 
+	@Column(nullable=false, length=100)
 	private String name;
 
-	//bi-directional many-to-one association to Event
-	@OneToMany(mappedBy="team", fetch=FetchType.EAGER)
-	private List<Event> events;
-
-	//bi-directional many-to-one association to TeamLocation
-	@OneToMany(mappedBy="team", fetch=FetchType.EAGER)
-	private List<TeamLocation> teamLocations;
-
-	//bi-directional many-to-one association to TeamOfficer
-	@OneToMany(mappedBy="team", fetch=FetchType.EAGER)
-	private List<TeamOfficer> teamOfficers;
-
-	//bi-directional many-to-one association to TeamPhotoAlbum
-	@OneToMany(mappedBy="team", fetch=FetchType.EAGER)
-	private List<TeamPhotoAlbum> teamPhotoAlbums;
+	//bi-directional many-to-many association to User
+	@ManyToMany(mappedBy="teams")
+	private List<User> users;
 
 	//bi-directional many-to-one association to TeamPhoto
-	@OneToMany(mappedBy="team", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="team")
 	private List<TeamPhoto> teamPhotos;
 
-	//bi-directional many-to-one association to TeamRating
-	@OneToMany(mappedBy="team", fetch=FetchType.EAGER)
-	private List<TeamRating> teamRatings;
+	//bi-directional many-to-one association to TeamPhotoAlbum
+	@OneToMany(mappedBy="team")
+	private List<TeamPhotoAlbum> teamPhotoAlbums;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="created_by")
-	private User user;
+	//bi-directional many-to-one association to Event
+	@OneToMany(mappedBy="team1")
+	private List<Event> events1;
 
-	//bi-directional many-to-one association to UserTeamFavorite
-	@OneToMany(mappedBy="team", fetch=FetchType.EAGER)
-	private List<UserTeamFavorite> userTeamFavorites;
-
-	//bi-directional many-to-one association to UserTeam
-	@OneToMany(mappedBy="team", fetch=FetchType.EAGER)
-	private List<UserTeam> userTeams;
+	//bi-directional many-to-one association to Event
+	@OneToMany(mappedBy="team2")
+	private List<Event> events2;
 
 	public Team() {
 	}
@@ -86,6 +75,14 @@ public class Team implements Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public int getCreatedBy() {
+		return this.createdBy;
+	}
+
+	public void setCreatedBy(int createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	public Date getCreatedDate() {
@@ -120,92 +117,12 @@ public class Team implements Serializable {
 		this.name = name;
 	}
 
-	public List<Event> getEvents() {
-		return this.events;
+	public List<User> getUsers() {
+		return this.users;
 	}
 
-	public void setEvents(List<Event> events) {
-		this.events = events;
-	}
-
-	public Event addEvent(Event event) {
-		getEvents().add(event);
-		event.setTeam(this);
-
-		return event;
-	}
-
-	public Event removeEvent(Event event) {
-		getEvents().remove(event);
-		event.setTeam(null);
-
-		return event;
-	}
-
-	public List<TeamLocation> getTeamLocations() {
-		return this.teamLocations;
-	}
-
-	public void setTeamLocations(List<TeamLocation> teamLocations) {
-		this.teamLocations = teamLocations;
-	}
-
-	public TeamLocation addTeamLocation(TeamLocation teamLocation) {
-		getTeamLocations().add(teamLocation);
-		teamLocation.setTeam(this);
-
-		return teamLocation;
-	}
-
-	public TeamLocation removeTeamLocation(TeamLocation teamLocation) {
-		getTeamLocations().remove(teamLocation);
-		teamLocation.setTeam(null);
-
-		return teamLocation;
-	}
-
-	public List<TeamOfficer> getTeamOfficers() {
-		return this.teamOfficers;
-	}
-
-	public void setTeamOfficers(List<TeamOfficer> teamOfficers) {
-		this.teamOfficers = teamOfficers;
-	}
-
-	public TeamOfficer addTeamOfficer(TeamOfficer teamOfficer) {
-		getTeamOfficers().add(teamOfficer);
-		teamOfficer.setTeam(this);
-
-		return teamOfficer;
-	}
-
-	public TeamOfficer removeTeamOfficer(TeamOfficer teamOfficer) {
-		getTeamOfficers().remove(teamOfficer);
-		teamOfficer.setTeam(null);
-
-		return teamOfficer;
-	}
-
-	public List<TeamPhotoAlbum> getTeamPhotoAlbums() {
-		return this.teamPhotoAlbums;
-	}
-
-	public void setTeamPhotoAlbums(List<TeamPhotoAlbum> teamPhotoAlbums) {
-		this.teamPhotoAlbums = teamPhotoAlbums;
-	}
-
-	public TeamPhotoAlbum addTeamPhotoAlbum(TeamPhotoAlbum teamPhotoAlbum) {
-		getTeamPhotoAlbums().add(teamPhotoAlbum);
-		teamPhotoAlbum.setTeam(this);
-
-		return teamPhotoAlbum;
-	}
-
-	public TeamPhotoAlbum removeTeamPhotoAlbum(TeamPhotoAlbum teamPhotoAlbum) {
-		getTeamPhotoAlbums().remove(teamPhotoAlbum);
-		teamPhotoAlbum.setTeam(null);
-
-		return teamPhotoAlbum;
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public List<TeamPhoto> getTeamPhotos() {
@@ -230,78 +147,70 @@ public class Team implements Serializable {
 		return teamPhoto;
 	}
 
-	public List<TeamRating> getTeamRatings() {
-		return this.teamRatings;
+	public List<TeamPhotoAlbum> getTeamPhotoAlbums() {
+		return this.teamPhotoAlbums;
 	}
 
-	public void setTeamRatings(List<TeamRating> teamRatings) {
-		this.teamRatings = teamRatings;
+	public void setTeamPhotoAlbums(List<TeamPhotoAlbum> teamPhotoAlbums) {
+		this.teamPhotoAlbums = teamPhotoAlbums;
 	}
 
-	public TeamRating addTeamRating(TeamRating teamRating) {
-		getTeamRatings().add(teamRating);
-		teamRating.setTeam(this);
+	public TeamPhotoAlbum addTeamPhotoAlbum(TeamPhotoAlbum teamPhotoAlbum) {
+		getTeamPhotoAlbums().add(teamPhotoAlbum);
+		teamPhotoAlbum.setTeam(this);
 
-		return teamRating;
+		return teamPhotoAlbum;
 	}
 
-	public TeamRating removeTeamRating(TeamRating teamRating) {
-		getTeamRatings().remove(teamRating);
-		teamRating.setTeam(null);
+	public TeamPhotoAlbum removeTeamPhotoAlbum(TeamPhotoAlbum teamPhotoAlbum) {
+		getTeamPhotoAlbums().remove(teamPhotoAlbum);
+		teamPhotoAlbum.setTeam(null);
 
-		return teamRating;
+		return teamPhotoAlbum;
 	}
 
-	public User getUser() {
-		return this.user;
+	public List<Event> getEvents1() {
+		return this.events1;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setEvents1(List<Event> events1) {
+		this.events1 = events1;
 	}
 
-	public List<UserTeamFavorite> getUserTeamFavorites() {
-		return this.userTeamFavorites;
+	public Event addEvents1(Event events1) {
+		getEvents1().add(events1);
+		events1.setTeam1(this);
+
+		return events1;
 	}
 
-	public void setUserTeamFavorites(List<UserTeamFavorite> userTeamFavorites) {
-		this.userTeamFavorites = userTeamFavorites;
+	public Event removeEvents1(Event events1) {
+		getEvents1().remove(events1);
+		events1.setTeam1(null);
+
+		return events1;
 	}
 
-	public UserTeamFavorite addUserTeamFavorite(UserTeamFavorite userTeamFavorite) {
-		getUserTeamFavorites().add(userTeamFavorite);
-		userTeamFavorite.setTeam(this);
-
-		return userTeamFavorite;
+	public List<Event> getEvents2() {
+		return this.events2;
 	}
 
-	public UserTeamFavorite removeUserTeamFavorite(UserTeamFavorite userTeamFavorite) {
-		getUserTeamFavorites().remove(userTeamFavorite);
-		userTeamFavorite.setTeam(null);
-
-		return userTeamFavorite;
+	public void setEvents2(List<Event> events2) {
+		this.events2 = events2;
 	}
 
-	public List<UserTeam> getUserTeams() {
-		return this.userTeams;
+	public Event addEvents2(Event events2) {
+		getEvents2().add(events2);
+		events2.setTeam2(this);
+
+		return events2;
 	}
 
-	public void setUserTeams(List<UserTeam> userTeams) {
-		this.userTeams = userTeams;
-	}
+	public Event removeEvents2(Event events2) {
+		getEvents2().remove(events2);
+		events2.setTeam2(null);
 
-	public UserTeam addUserTeam(UserTeam userTeam) {
-		getUserTeams().add(userTeam);
-		userTeam.setTeam(this);
-
-		return userTeam;
-	}
-
-	public UserTeam removeUserTeam(UserTeam userTeam) {
-		getUserTeams().remove(userTeam);
-		userTeam.setTeam(null);
-
-		return userTeam;
+		return events2;
 	}
 
 }

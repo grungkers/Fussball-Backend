@@ -18,34 +18,36 @@ public class Field implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
 	private byte availability;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date")
+	@Column(name="created_date", nullable=false)
 	private Date createdDate;
 
+	@Column(length=45)
 	private String description;
 
-	@Column(name="field_type")
+	@Column(name="field_type", nullable=false, length=30)
 	private String fieldType;
 
-	@Column(name="is_indoor")
+	@Column(name="is_indoor", nullable=false)
 	private byte isIndoor;
 
 	private float length;
 
+	@Column(nullable=false, length=45)
 	private String name;
 
+	@Column(nullable=false, precision=10, scale=2)
 	private BigDecimal price;
 
-	private float width;
+	@Column(name="sports_venue_id")
+	private int sportsVenueId;
 
-	//bi-directional many-to-one association to SportsVenue
-	@ManyToOne
-	@JoinColumn(name="sports_venue_id")
-	private SportsVenue sportsVenue;
+	private float width;
 
 	public Field() {
 	}
@@ -122,20 +124,20 @@ public class Field implements Serializable {
 		this.price = price;
 	}
 
+	public int getSportsVenueId() {
+		return this.sportsVenueId;
+	}
+
+	public void setSportsVenueId(int sportsVenueId) {
+		this.sportsVenueId = sportsVenueId;
+	}
+
 	public float getWidth() {
 		return this.width;
 	}
 
 	public void setWidth(float width) {
 		this.width = width;
-	}
-
-	public SportsVenue getSportsVenue() {
-		return this.sportsVenue;
-	}
-
-	public void setSportsVenue(SportsVenue sportsVenue) {
-		this.sportsVenue = sportsVenue;
 	}
 
 }

@@ -2,6 +2,7 @@ package org.playwork.fussballfinder.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -16,25 +17,39 @@ public class UserProfile implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(name="club_fans")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date birthdate;
+
+	@Column(name="club_fans", length=255)
 	private String clubFans;
+
+	@Column(name="dominant_foot", length=10)
+	private String dominantFoot;
+
+	@Column(length=15)
+	private String gender;
 
 	private float height;
 
+	@Column(nullable=false, length=255)
 	private String name;
 
-	@Column(name="preferred_position")
+	@Column(length=50)
+	private String nationality;
+
+	@Column(name="preferred_position", length=45)
 	private String preferredPosition;
 
-	@Column(name="self_describe")
+	@Column(name="self_describe", length=255)
 	private String selfDescribe;
 
 	private float weight;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
+	//bi-directional one-to-one association to User
+	@OneToOne(mappedBy="userProfile", fetch=FetchType.LAZY)
 	private User user;
 
 	public UserProfile() {
@@ -48,12 +63,36 @@ public class UserProfile implements Serializable {
 		this.id = id;
 	}
 
+	public Date getBirthdate() {
+		return this.birthdate;
+	}
+
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+	}
+
 	public String getClubFans() {
 		return this.clubFans;
 	}
 
 	public void setClubFans(String clubFans) {
 		this.clubFans = clubFans;
+	}
+
+	public String getDominantFoot() {
+		return this.dominantFoot;
+	}
+
+	public void setDominantFoot(String dominantFoot) {
+		this.dominantFoot = dominantFoot;
+	}
+
+	public String getGender() {
+		return this.gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public float getHeight() {
@@ -70,6 +109,14 @@ public class UserProfile implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getNationality() {
+		return this.nationality;
+	}
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
 	}
 
 	public String getPreferredPosition() {

@@ -17,21 +17,22 @@ public class UserPhoto implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
+	@Column(name="album_id")
+	private int albumId;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date")
+	@Column(name="created_date", nullable=false)
 	private Date createdDate;
 
+	@Column(nullable=false, length=150)
 	private String filename;
 
-	//bi-directional many-to-one association to UserPhotoAlbum
-	@ManyToOne
-	@JoinColumn(name="album_id")
-	private UserPhotoAlbum userPhotoAlbum;
-
 	//bi-directional many-to-one association to User
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 
 	public UserPhoto() {
@@ -43,6 +44,14 @@ public class UserPhoto implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getAlbumId() {
+		return this.albumId;
+	}
+
+	public void setAlbumId(int albumId) {
+		this.albumId = albumId;
 	}
 
 	public Date getCreatedDate() {
@@ -59,14 +68,6 @@ public class UserPhoto implements Serializable {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
-	}
-
-	public UserPhotoAlbum getUserPhotoAlbum() {
-		return this.userPhotoAlbum;
-	}
-
-	public void setUserPhotoAlbum(UserPhotoAlbum userPhotoAlbum) {
-		this.userPhotoAlbum = userPhotoAlbum;
 	}
 
 	public User getUser() {

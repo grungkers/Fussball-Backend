@@ -2,6 +2,7 @@ package org.playwork.fussballfinder.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -16,15 +17,18 @@ public class UserTeam implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
-	//bi-directional many-to-one association to Team
-	@ManyToOne
-	private Team team;
+	@Column(name="team_id", nullable=false)
+	private int teamId;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
+	@Column(name="user_id", nullable=false)
+	private int userId;
+
+	//bi-directional many-to-one association to TeamOfficer
+	@OneToMany(mappedBy="userTeam")
+	private List<TeamOfficer> teamOfficers;
 
 	public UserTeam() {
 	}
@@ -37,20 +41,42 @@ public class UserTeam implements Serializable {
 		this.id = id;
 	}
 
-	public Team getTeam() {
-		return this.team;
+	public int getTeamId() {
+		return this.teamId;
 	}
 
-	public void setTeam(Team team) {
-		this.team = team;
+	public void setTeamId(int teamId) {
+		this.teamId = teamId;
 	}
 
-	public User getUser() {
-		return this.user;
+	public int getUserId() {
+		return this.userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+	public List<TeamOfficer> getTeamOfficers() {
+		return this.teamOfficers;
+	}
+
+	public void setTeamOfficers(List<TeamOfficer> teamOfficers) {
+		this.teamOfficers = teamOfficers;
+	}
+
+	public TeamOfficer addTeamOfficer(TeamOfficer teamOfficer) {
+		getTeamOfficers().add(teamOfficer);
+		teamOfficer.setUserTeam(this);
+
+		return teamOfficer;
+	}
+
+	public TeamOfficer removeTeamOfficer(TeamOfficer teamOfficer) {
+		getTeamOfficers().remove(teamOfficer);
+		teamOfficer.setUserTeam(null);
+
+		return teamOfficer;
 	}
 
 }

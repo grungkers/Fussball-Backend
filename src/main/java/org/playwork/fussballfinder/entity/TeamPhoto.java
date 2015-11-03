@@ -17,21 +17,22 @@ public class TeamPhoto implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
+	@Column(name="album_id")
+	private int albumId;
+
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date")
+	@Column(name="created_date", nullable=false)
 	private Date createdDate;
 
+	@Column(nullable=false, length=150)
 	private String filename;
 
-	//bi-directional many-to-one association to TeamPhotoAlbum
-	@ManyToOne
-	@JoinColumn(name="album_id")
-	private TeamPhotoAlbum teamPhotoAlbum;
-
 	//bi-directional many-to-one association to Team
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="team_id", nullable=false)
 	private Team team;
 
 	public TeamPhoto() {
@@ -43,6 +44,14 @@ public class TeamPhoto implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getAlbumId() {
+		return this.albumId;
+	}
+
+	public void setAlbumId(int albumId) {
+		this.albumId = albumId;
 	}
 
 	public Date getCreatedDate() {
@@ -59,14 +68,6 @@ public class TeamPhoto implements Serializable {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
-	}
-
-	public TeamPhotoAlbum getTeamPhotoAlbum() {
-		return this.teamPhotoAlbum;
-	}
-
-	public void setTeamPhotoAlbum(TeamPhotoAlbum teamPhotoAlbum) {
-		this.teamPhotoAlbum = teamPhotoAlbum;
 	}
 
 	public Team getTeam() {

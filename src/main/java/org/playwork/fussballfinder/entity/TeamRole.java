@@ -2,7 +2,6 @@ package org.playwork.fussballfinder.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -17,16 +16,14 @@ public class TeamRole implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Lob
 	private String description;
 
+	@Column(nullable=false, length=100)
 	private String name;
-
-	//bi-directional many-to-one association to TeamOfficer
-	@OneToMany(mappedBy="teamRole", fetch=FetchType.EAGER)
-	private List<TeamOfficer> teamOfficers;
 
 	public TeamRole() {
 	}
@@ -53,28 +50,6 @@ public class TeamRole implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public List<TeamOfficer> getTeamOfficers() {
-		return this.teamOfficers;
-	}
-
-	public void setTeamOfficers(List<TeamOfficer> teamOfficers) {
-		this.teamOfficers = teamOfficers;
-	}
-
-	public TeamOfficer addTeamOfficer(TeamOfficer teamOfficer) {
-		getTeamOfficers().add(teamOfficer);
-		teamOfficer.setTeamRole(this);
-
-		return teamOfficer;
-	}
-
-	public TeamOfficer removeTeamOfficer(TeamOfficer teamOfficer) {
-		getTeamOfficers().remove(teamOfficer);
-		teamOfficer.setTeamRole(null);
-
-		return teamOfficer;
 	}
 
 }

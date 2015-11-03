@@ -16,17 +16,20 @@ public class UserRating implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
+	@Column(nullable=false)
 	private int count;
 
+	@Column(nullable=false, length=15)
 	private String lastip;
 
+	@Column(nullable=false)
 	private int sum;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
+	@Column(name="users_id", nullable=false)
+	private int usersId;
 
 	public UserRating() {
 	}
@@ -63,12 +66,12 @@ public class UserRating implements Serializable {
 		this.sum = sum;
 	}
 
-	public User getUser() {
-		return this.user;
+	public int getUsersId() {
+		return this.usersId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUsersId(int usersId) {
+		this.usersId = usersId;
 	}
 
 }

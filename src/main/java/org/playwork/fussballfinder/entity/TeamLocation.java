@@ -16,17 +16,20 @@ public class TeamLocation implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
+	@Column(nullable=false, length=255)
 	private String address;
 
+	@Column(nullable=false)
 	private float latitude;
 
+	@Column(nullable=false)
 	private float longitude;
 
-	//bi-directional many-to-one association to Team
-	@ManyToOne
-	private Team team;
+	@Column(name="team_id", nullable=false)
+	private int teamId;
 
 	public TeamLocation() {
 	}
@@ -63,12 +66,12 @@ public class TeamLocation implements Serializable {
 		this.longitude = longitude;
 	}
 
-	public Team getTeam() {
-		return this.team;
+	public int getTeamId() {
+		return this.teamId;
 	}
 
-	public void setTeam(Team team) {
-		this.team = team;
+	public void setTeamId(int teamId) {
+		this.teamId = teamId;
 	}
 
 }

@@ -16,15 +16,14 @@ public class UserTeamFavorite implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
-	//bi-directional many-to-one association to Team
-	@ManyToOne
-	private Team team;
+	@Column(name="team_id", nullable=false)
+	private int teamId;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
+	@Column(name="user_id", nullable=false)
+	private int userId;
 
 	public UserTeamFavorite() {
 	}
@@ -37,20 +36,20 @@ public class UserTeamFavorite implements Serializable {
 		this.id = id;
 	}
 
-	public Team getTeam() {
-		return this.team;
+	public int getTeamId() {
+		return this.teamId;
 	}
 
-	public void setTeam(Team team) {
-		this.team = team;
+	public void setTeamId(int teamId) {
+		this.teamId = teamId;
 	}
 
-	public User getUser() {
-		return this.user;
+	public int getUserId() {
+		return this.userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 }

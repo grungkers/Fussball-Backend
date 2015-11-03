@@ -16,18 +16,20 @@ public class SportsVenuesLocation implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
 	private int id;
 
+	@Column(nullable=false, length=255)
 	private String address;
 
+	@Column(nullable=false)
 	private float latitude;
 
+	@Column(nullable=false)
 	private float longitude;
 
-	//bi-directional many-to-one association to SportsVenue
-	@ManyToOne
-	@JoinColumn(name="sports_venue_id")
-	private SportsVenue sportsVenue;
+	@Column(name="sports_venue_id", nullable=false)
+	private int sportsVenueId;
 
 	public SportsVenuesLocation() {
 	}
@@ -64,12 +66,12 @@ public class SportsVenuesLocation implements Serializable {
 		this.longitude = longitude;
 	}
 
-	public SportsVenue getSportsVenue() {
-		return this.sportsVenue;
+	public int getSportsVenueId() {
+		return this.sportsVenueId;
 	}
 
-	public void setSportsVenue(SportsVenue sportsVenue) {
-		this.sportsVenue = sportsVenue;
+	public void setSportsVenueId(int sportsVenueId) {
+		this.sportsVenueId = sportsVenueId;
 	}
 
 }
