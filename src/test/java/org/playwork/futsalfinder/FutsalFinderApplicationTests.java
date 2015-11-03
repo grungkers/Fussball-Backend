@@ -1,5 +1,7 @@
 package org.playwork.futsalfinder;
 
+import javax.annotation.PostConstruct;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.playwork.fussballfinder.FutsalFinderApplication;
@@ -23,5 +25,9 @@ public class FutsalFinderApplicationTests {
 		}
 		
 	}
-
+	
+	@PostConstruct
+	public void initIt() throws Exception {
+	  System.out.println("Init method");
+	}
 }
